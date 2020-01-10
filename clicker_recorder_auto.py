@@ -122,7 +122,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.recorder = Recorder()
             self.recorder.get_path(self.fileName)
             self.recorder.get_alarm(self.alarm_type)
-            
+
             self.worker = Worker(self.recorder.listener)
             # self.threadpool.start(self.worker)
             self.worker.start()
@@ -191,6 +191,11 @@ class Recorder():
     #         (x, y)))
 
     # Collect events until released
+    def start_toner(self, interval=5):
+        while True:
+            t = threading.Timer(interval, self.keyboard.press('s'))
+            t.start()   
+
     def listener(self, progress_callback):
         self.progress_callback = progress_callback
         with Listener(
@@ -206,29 +211,6 @@ class Recorder():
         # self.listener.start()
     def stop_recording(self):
         return False
-
-class IntervalToner():
-
-    def get_alarm(self, alarm_type):
-        if alarm_type == 'Intermittent':
-            self.alarm = 'iso8201_lf_10s.wav'
-        elif alarm_type == 'Continuous':
-            self.alarm = '500hz_cont_10s.wav'    
-    
-    def to_play_sound(slef, hour, min):
-        now = datetime.now()
-        currentHour = now.hour
-        currentMin = now.minute
-        if currentHour == hour and currentMin == min and not is_played:
-            is_played = True
-            PlaySound(self.alarm, SND_FILENAME|SND_LOOP|SND_ASYNC)
-        if currentHour != myHour or currentMin != myMin:
-            is_played = False
-    
-    def start_toner(self):
-        while True:
-            t = threading.Timer(5.0, to_play_sound, [15, 33])
-            t.start()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
