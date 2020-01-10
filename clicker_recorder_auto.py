@@ -4,17 +4,31 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.Qt import QThread
-from clicker_ui import *
+from clicker import *
 
 import threading
+from threading import Timer
 
 from pynput.keyboard import Key, KeyCode, Listener, Controller
 import os
+import sys
 import time
 from datetime import datetime
 import pandas as pd
 
 from winsound import PlaySound, SND_FILENAME, SND_LOOP, SND_ASYNC
+
+# get relative path for compiling into one file
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 class WorkerSignals(QObject):
     '''
@@ -46,8 +60,9 @@ class Worker(QThread):
         self.fn = fn
         self.signals = WorkerSignals()
 
-        # Add the callback to kwargs
+        # Add the callback to kwargss
         self.kwargs['progress_callback'] = self.signals.progress
+        self.threadactive = True
 
     @pyqtSlot()
     def run(self):
@@ -63,7 +78,6 @@ class Worker(QThread):
         finally:
             self.signals.finished.emit()
 
-
 class MyMainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)
@@ -75,6 +89,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.debugPrint('Current alarm tone: {}'.format(self.signalBox.currentText()))
         self.alarm_type = self.signalBox.currentText()
         self.returnedPressedPath()
+        self.recorder = None
+
+
+
+
 
     def selectionchange(self,i):
         self.debugPrint("Chosen alarm tone: {}".format(self.signalBox.currentText()))
@@ -108,7 +127,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.debugPrint("record will be stored to: {}".format(self.fileName))
 
     def startButtonClicked(self):
-        print('start clicked')
+        # print('start clicked')
         if not self.fileName:
             m = QtWidgets.QMessageBox()
             m.setText("Unassigned record path!\nAssign file path before recording!")
@@ -122,7 +141,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.recorder = Recorder()
             self.recorder.get_path(self.fileName)
             self.recorder.get_alarm(self.alarm_type)
-
+            
             self.worker = Worker(self.recorder.listener)
             # self.threadpool.start(self.worker)
             self.worker.start()
@@ -135,6 +154,43 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.debugPrint("Start recording")
             self.recordIndicator.setText('= Recoding! =')
 
+    def send_signal(self):
+        self.keyboard.press('s')
+
+    def automatic_toner(self, progress_callback):
+        while True:
+            t = Timer(5, self.send_signal)
+            t.start()  
+
+    def startTestClicked(self, interval=5):
+        if not self.recorder:
+            self.debugPrint("Start recorder first before clicking start test button!")
+        else:
+            # self.toner = RepeatingTimer(5)
+            # self.toner.get_alarm(self.alarm_type)
+            # self.worker_toner = Worker(self.toner.run)
+            # self.worker_toner.start()
+            # self.threads.append(self.worker_toner)
+            # self.worker_toner.signals.progress.connect(self.debugPrint)
+            self.thread = QThread()
+            self.toner = Toner()
+            self.toner.get_alarm(self.alarm_type)
+            self.toner.moveToThread(self.thread)
+            self.thread.started.connect(self.toner.task)
+            self.thread.start()
+
+    def endTestClicked(self):
+        if not (self.toner & self.thread):
+            self.debugPrint('Not recording!')
+        else:
+            self.toner.stop()
+            self.thread.quit()
+            self.thread.wait()
+
+    def toner(self):
+        while True:
+            t = Timer(interval, self.keyboard.press('s'))
+            t.start()  
 
     def endButtonClicked(self):
         # pass the function to execute
@@ -145,15 +201,66 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
     def thread_complete(self):
         self.debugPrint("Recorder Stopped!")
 
-class Recorder():
+class Toner(QObject):
+    'Object managing the simulation'
 
-    # def __init___(self, fq, sounds):
+    def __init__(self):
+        super(Toner, self).__init__()
+        self._step = 0
+        self._isRunning = True
+        self._maxSteps = 20
+        self.keyboard = Controller()
     
     def get_alarm(self, alarm_type):
         if alarm_type == 'Intermittent':
-            self.alarm = 'iso8201_lf_10s.wav'
+            self.alarm = resource_path('iso8201_lf_10s.wav')
         elif alarm_type == 'Continuous':
-            self.alarm = '500hz_cont_10s.wav'
+            self.alarm = resource_path('500hz_cont_10s.wav')
+   
+    @pyqtSlot()
+    def task(self):
+        if not self._isRunning:
+            self._isRunning = True
+        while self._isRunning == True:
+            self.keyboard.press('s')
+            time.sleep(8)
+
+    @pyqtSlot()
+    def stop(self):
+        self._isRunning = False
+
+class RepeatingTimer(object):
+    def __init__(self, interval_seconds):
+        self.interval_seconds = interval_seconds
+        self.stop_event = True
+        self.keyboard = Controller()
+ 
+    def get_alarm(self, alarm_type):
+        if alarm_type == 'Intermittent':
+            self.alarm = resource_path('iso8201_lf_10s.wav')
+        elif alarm_type == 'Continuous':
+            self.alarm = resource_path('500hz_cont_10s.wav')
+ 
+    def run(self, progress_callback):
+        self.progress_callback = progress_callback
+        while True:
+            self.keyboard.press('s')
+            self.progress_callback.emit('automated')
+            time.sleep(self.interval_seconds)
+            
+    def stop(self):
+        return False
+
+class Recorder(object):
+
+    def __init__(self):
+        self.keyboard = Controller()
+
+    def get_alarm(self, alarm_type):
+        if alarm_type == 'Intermittent':
+            self.alarm = resource_path('iso8201_lf_10s.wav')
+        elif alarm_type == 'Continuous':
+            self.alarm = resource_path('500hz_cont_10s.wav')
     
     def get_path(self, record_path):
         self.record_path = record_path
@@ -174,7 +281,7 @@ class Recorder():
             pressed_time = datetime.fromtimestamp(time.time())
             self.record(key, pressed_time, self.record_path)
             self.progress_callback.emit('Signaled at {}'.format(pressed_time))
-            PlaySound(self.alarm, SND_FILENAME|SND_LOOP|SND_ASYNC)
+            PlaySound(self.alarm, SND_FILENAME|SND_ASYNC)
         elif key == KeyCode.from_char('r'):
             pressed_time = datetime.fromtimestamp(time.time())
             self.record(key, pressed_time, self.record_path)
@@ -191,10 +298,6 @@ class Recorder():
     #         (x, y)))
 
     # Collect events until released
-    def start_toner(self, interval=5):
-        while True:
-            t = threading.Timer(interval, self.keyboard.press('s'))
-            t.start()   
 
     def listener(self, progress_callback):
         self.progress_callback = progress_callback

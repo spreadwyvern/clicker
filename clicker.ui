@@ -43,13 +43,13 @@
      <string>Not Recording</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>20</y>
-      <width>761</width>
-      <height>301</height>
+      <width>786</width>
+      <height>304</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -194,6 +194,19 @@
          </widget>
         </item>
         <item>
+         <widget class="QPushButton" name="startTest">
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Start Test</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="endButton">
           <property name="font">
            <font>
@@ -203,6 +216,19 @@
           </property>
           <property name="text">
            <string>Stop Recording</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="endTest">
+          <property name="font">
+           <font>
+            <family>Open Sans</family>
+            <pointsize>16</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>End Test</string>
           </property>
          </widget>
         </item>

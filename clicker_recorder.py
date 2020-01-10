@@ -4,17 +4,30 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.Qt import QThread
-from clicker_ui import *
+from clicker import *
 
 import threading
 
 from pynput.keyboard import Key, KeyCode, Listener, Controller
 import os
+import sys
 import time
 from datetime import datetime
 import pandas as pd
 
 from winsound import PlaySound, SND_FILENAME, SND_LOOP, SND_ASYNC
+
+# get relative path for compiling into one file
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 class WorkerSignals(QObject):
     '''
@@ -108,7 +121,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             self.debugPrint("record will be stored to: {}".format(self.fileName))
 
     def startButtonClicked(self):
-        print('start clicked')
+        # print('start clicked')
         if not self.fileName:
             m = QtWidgets.QMessageBox()
             m.setText("Unassigned record path!\nAssign file path before recording!")
@@ -151,9 +164,9 @@ class Recorder():
     
     def get_alarm(self, alarm_type):
         if alarm_type == 'Intermittent':
-            self.alarm = 'iso8201_lf_10s.wav'
+            self.alarm = resource_path('iso8201_lf_10s.wav')
         elif alarm_type == 'Continuous':
-            self.alarm = '500hz_cont_10s.wav'
+            self.alarm = resource_path('500hz_cont_10s.wav')
     
     def get_path(self, record_path):
         self.record_path = record_path
@@ -174,7 +187,7 @@ class Recorder():
             pressed_time = datetime.fromtimestamp(time.time())
             self.record(key, pressed_time, self.record_path)
             self.progress_callback.emit('Signaled at {}'.format(pressed_time))
-            PlaySound(self.alarm, SND_FILENAME|SND_LOOP|SND_ASYNC)
+            PlaySound(self.alarm, SND_FILENAME|SND_ASYNC)
         elif key == KeyCode.from_char('r'):
             pressed_time = datetime.fromtimestamp(time.time())
             self.record(key, pressed_time, self.record_path)
@@ -206,29 +219,6 @@ class Recorder():
         # self.listener.start()
     def stop_recording(self):
         return False
-
-class IntervalToner():
-
-    def get_alarm(self, alarm_type):
-        if alarm_type == 'Intermittent':
-            self.alarm = 'iso8201_lf_10s.wav'
-        elif alarm_type == 'Continuous':
-            self.alarm = '500hz_cont_10s.wav'    
-    
-    def to_play_sound(slef, hour, min):
-        now = datetime.now()
-        currentHour = now.hour
-        currentMin = now.minute
-        if currentHour == hour and currentMin == min and not is_played:
-            is_played = True
-            PlaySound(self.alarm, SND_FILENAME|SND_LOOP|SND_ASYNC)
-        if currentHour != myHour or currentMin != myMin:
-            is_played = False
-    
-    def start_toner(self):
-        while True:
-            t = threading.Timer(5.0, to_play_sound, [15, 33])
-            t.start()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
