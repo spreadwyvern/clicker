@@ -14,8 +14,8 @@ python clicker.py
 or run the compiled executable clicker.exe file in 'dist' folder.
 
 ## Description
-The main app is the clicker.py which calls clicker_ui.py for the layout of UI.
-Core functions are in utils.py which consists of the AutoSignal and Recorder classes.
+The main app is the *clicker.py* which calls *clicker_ui.py* for the layout of UI.
+Core functions are in *utils.py* which consists of the AutoSignal and Recorder classes.
 ### AutoSignal
 Automatically send signal to the patient event receptor on EEG.
 There are two types of signals:
@@ -33,6 +33,6 @@ Monitors the below keyboard inputs and record the corresponding event
 
 
 ## Default input and output files
-The default ouput file is clicker_recorder.csv, this can be modified in line 27 of clicker.py
-Default alarm tone is 200.wav, this can be changed in line 160 of utils.py
+The default ouput file is *clicker_record.csv*, this can be modified in line 27 of *clicker.py*
+Default alarm tone is *200.wav*, this can be changed in line 160 of *utils.py*
 
