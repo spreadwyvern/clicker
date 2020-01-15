@@ -1,167 +1,117 @@
-# -*- coding: utf-8 -*-
+import sys
+import traceback
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.Qt import QThread
 
-# Form implementation generated from reading ui file 'clicker.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.1
-#
-# WARNING! All changes made in this file will be lost!
+# import UI layout
+from clicker_ui import *
+'''
+import utilities: Recorder, AutoSignal
+The Recorder class object is in charge of monitoring and recording keyboard inputs.
+The AutoSignal class object is in charge of sending automatic signals.
+'''
+from utils import *
 
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+# Main UI class
+class MyMainWindow(QMainWindow, Ui_MainWindow):
+    def __init__(self, parent=None):
+        super(MyMainWindow, self).__init__(parent)
+        self.setupUi(self)
+        self.setWindowTitle("Clicker")
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(801, 826)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(20, 390, 761, 391))
-        self.textBrowser.setObjectName("textBrowser")
-        self.recordIndicator = QtWidgets.QLabel(self.centralwidget)
-        self.recordIndicator.setGeometry(QtCore.QRect(300, 330, 201, 41))
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(18)
-        self.recordIndicator.setFont(font)
-        self.recordIndicator.setObjectName("recordIndicator")
-        self.layoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(20, 20, 786, 304))
-        self.layoutWidget.setObjectName("layoutWidget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(16)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
-        self.label_2 = QtWidgets.QLabel(self.layoutWidget)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(9)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
-        self.verticalLayout.addWidget(self.label_2)
-        self.frame = QtWidgets.QFrame(self.layoutWidget)
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.frame)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.outputPath = QtWidgets.QLineEdit(self.frame)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        self.outputPath.setFont(font)
-        self.outputPath.setObjectName("outputPath")
-        self.horizontalLayout.addWidget(self.outputPath)
-        self.browseButton = QtWidgets.QPushButton(self.frame)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        self.browseButton.setFont(font)
-        self.browseButton.setObjectName("browseButton")
-        self.horizontalLayout.addWidget(self.browseButton)
-        self.verticalLayout.addWidget(self.frame)
-        self.label_4 = QtWidgets.QLabel(self.layoutWidget)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(16)
-        self.label_4.setFont(font)
-        self.label_4.setObjectName("label_4")
-        self.verticalLayout.addWidget(self.label_4)
-        self.frame_2 = QtWidgets.QFrame(self.layoutWidget)
-        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_2.setObjectName("frame_2")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.frame_2)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label_3 = QtWidgets.QLabel(self.frame_2)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        self.label_3.setFont(font)
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout_2.addWidget(self.label_3)
-        self.signalBox = QtWidgets.QComboBox(self.frame_2)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        self.signalBox.setFont(font)
-        self.signalBox.setObjectName("signalBox")
-        self.signalBox.addItem("")
-        self.signalBox.addItem("")
-        self.horizontalLayout_2.addWidget(self.signalBox)
-        self.verticalLayout.addWidget(self.frame_2)
-        self.frame_3 = QtWidgets.QFrame(self.layoutWidget)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_3)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.startButton = QtWidgets.QPushButton(self.frame_3)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(16)
-        self.startButton.setFont(font)
-        self.startButton.setObjectName("startButton")
-        self.horizontalLayout_3.addWidget(self.startButton)
-        self.startTest = QtWidgets.QPushButton(self.frame_3)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(16)
-        self.startTest.setFont(font)
-        self.startTest.setObjectName("startTest")
-        self.horizontalLayout_3.addWidget(self.startTest)
-        self.endButton = QtWidgets.QPushButton(self.frame_3)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(16)
-        self.endButton.setFont(font)
-        self.endButton.setObjectName("endButton")
-        self.horizontalLayout_3.addWidget(self.endButton)
-        self.endTest = QtWidgets.QPushButton(self.frame_3)
-        font = QtGui.QFont()
-        font.setFamily("Open Sans")
-        font.setPointSize(16)
-        self.endTest.setFont(font)
-        self.endTest.setObjectName("endTest")
-        self.horizontalLayout_3.addWidget(self.endTest)
-        self.verticalLayout.addWidget(self.frame_3)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 801, 25))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        # output csv path
+        self.fileName = 'click_record.csv'
+        self.threads = []
+        self.keyboard = Controller()
+        self.recording = False
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+       # connect buttons to custom button functions
+        self.startTest.clicked.connect(self.startTestClicked)
+        self.endTest.clicked.connect(self.endTestClicked)
+    
+    # print message to main text box    
+    def debugPrint(self, msg):
+        self.textBrowser.append(msg)
 
-        # custom button functions
-        self.outputPath.returnPressed.connect(MainWindow.returnedPressedPath)
-        self.startButton.clicked.connect(MainWindow.startButtonClicked)
-        self.endButton.clicked.connect(MainWindow.endButtonClicked)
-        self.startTest.clicked.connect(MainWindow.startTestClicked)
-        self.endTest.clicked.connect(MainWindow.endTestClicked)
-        self.signalBox.currentIndexChanged.connect(MainWindow.selectionchange)
-        self.browseButton.clicked.connect(MainWindow.browseButtonClicked)
+    # start button function
+    def startTestClicked(self):
+        '''
+        First check if patient ID is given, then check if the recorder is already running.
+        Creat a Recorder class object and move to a Worker (custom Qthread), then creat a AutoSignal class and move it
+        to a Qthread.
+        '''
+        # check if patient ID is given
+        if self.patientID.text() == '':
+            m = QtWidgets.QMessageBox()
+            m.setWindowTitle("No patient ID")
+            m.setIcon(QMessageBox.Warning)
+            m.setText("Enter patient ID before recording.")
+            m.setIcon(QtWidgets.QMessageBox.Warning)
+            m.setStandardButtons(QtWidgets.QMessageBox.Ok)
+            ret = m.exec_()
+        else:
+            # check if recorder is already running
+            if self.recording == False:
+                self.recording = True
+                self.recorder = Recorder()
+                self.recorder.get_path(self.fileName)
+                self.recorder.get_patient_id(self.patientID.text())
+                self.debugPrint('Patient ID: {}'.format(self.patientID.text()))
+                
+                self.worker = Worker(self.recorder.listener)
+                self.worker.start()
+                self.worker.signals.finished.connect(self.thread_complete)
+                self.worker.signals.result.connect(self.debugPrint)
+                self.worker.signals.progress.connect(self.debugPrint)
+          
+                # sent messages to main UI and text box
+                self.debugPrint("Start recording")
+                self.recordIndicator.setText('= Recoding! =')
+         
+                self.thread = QThread()
+                self.auto_signal = AutoSignal()
+                self.auto_signal.moveToThread(self.thread)
+                self.thread.started.connect(self.auto_signal.task)
+                self.thread.start()
+            else:
+                self.debugPrint('Already recording!')
+    
+    # end button function
+    def endTestClicked(self):
+        '''
+        Check if recorder is running, send out a keyboard ESC signal to terminate the recorder.
+        Stop the auto_signal.
+        Clear patient ID input box to prevent users from forgetting to change patient ID for a new patient.
+        '''
+        if self.recording:
+            self.keyboard.press(Key.esc)
+            self.keyboard.release(Key.esc)
 
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.recordIndicator.setText(_translate("MainWindow", "Not Recording"))
-        self.label.setText(_translate("MainWindow", "Output file path"))
-        self.label_2.setText(_translate("MainWindow", "Assign output file first, the file should be a .csv file. Default is click_record.csv"))
-        self.outputPath.setText(_translate("MainWindow", "click_record.csv"))
-        self.browseButton.setText(_translate("MainWindow", "Browse"))
-        self.label_4.setText(_translate("MainWindow", "Signal sound"))
-        self.label_3.setText(_translate("MainWindow", "Select alarm tone, continuous or intermittent"))
-        self.signalBox.setItemText(0, _translate("MainWindow", "Continuous"))
-        self.signalBox.setItemText(1, _translate("MainWindow", "Intermittent"))
-        self.startButton.setText(_translate("MainWindow", "Start Recording"))
-        self.startTest.setText(_translate("MainWindow", "Start Test"))
-        self.endButton.setText(_translate("MainWindow", "Stop Recording"))
-        self.endTest.setText(_translate("MainWindow", "End Test"))
+            # change main UI display
+            self.recordIndicator.setText('Not Recording')
+            self.auto_signal.stop()
+
+            self.thread.quit()
+            self.thread.wait()
+
+            # clear patient ID box
+            self.patientID.clear()
+
+            self.recording = False
+        else:
+            self.debugPrint('Not recording now.')
+            
+
+    def thread_complete(self):
+        self.debugPrint("Recorder Stopped!")
+
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    myWin = MyMainWindow()
+    myWin.show()
+    sys.exit(app.exec_())
