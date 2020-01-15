@@ -29,7 +29,9 @@ Monitors the below keyboard inputs and record the corresponding event
 - Scroll lock as syncing signal
 - in the recording csv file, 'event' column records each event with label 'tech', 'patient', 'auto', 'sync'  
 
-*note: the control box can receive caps_lock, num_lock and scoll_lock inputs from the PC, so I use it as a way to let PC to send signal from the PC to control the relay. However, it takes two press-release events of num_lock to turn on and off the relay. Thus to avoid recorder recording duplicated events I use F17 as the key for recorder to monitor*
+*note: the control box can receive caps_lock, num_lock and scoll_lock inputs from the PC, so I use it as a way to let PC to send signal from the PC to control the relay. However, it takes two press-release events of num_lock to turn on and off the relay. Thus to avoid recorder recording duplicated events I use F17 as the key for recorder to monitor*  
+
+*Another more sophisticated way to control the relay by the PC is through USB HID interface but this requires further time and effort in digging into the HID report used by the control box*
 
 
 ## Default input and output files
