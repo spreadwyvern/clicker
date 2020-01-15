@@ -58,10 +58,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.frame_3)
         self.horizontalLayout_3.setAlignment(QtCore.Qt.AlignJustify)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.startTest = PicButton(resource_path('start.png'), resource_path('start_hover.png'), resource_path('start_click.png'), self.frame_3)
+        self.startTest = PicButton(resource_path('data/start.png'), 
+            resource_path('data/start_hover.png'), 
+            resource_path('data/start_click.png'), self.frame_3)
         self.startTest.setObjectName("startTest")
         self.horizontalLayout_3.addWidget(self.startTest)
-        self.endTest = PicButton(resource_path('stop.png'), resource_path('stop_hover.png'), resource_path('stop_click.png'), self.frame_3)
+        self.endTest = PicButton(resource_path('data/stop.png'), 
+            resource_path('data/stop_hover.png'), 
+            resource_path('data/stop_click.png'), self.frame_3)
         font = QtGui.QFont()
         font.setFamily("Open Sans")
         font.setPointSize(16)

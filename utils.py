@@ -5,9 +5,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.Qt import QThread
 
-# import UI layout
-from clicker_simple import *
-
 # keyboard control
 from pynput.keyboard import Key, KeyCode, Listener, Controller
 # sound playback control
@@ -15,7 +12,6 @@ from winsound import PlaySound, SND_FILENAME, SND_LOOP, SND_ASYNC
 
 from threading import Thread
 import os
-import sys
 import time
 from datetime import datetime
 import pandas as pd
@@ -157,7 +153,7 @@ class Recorder(object):
 
     def __init__(self):
         self.keyboard = Controller()
-        self.alarm = resource_path('200.wav')
+        self.alarm = resource_path('data/200.wav')
     
     def get_path(self, record_path):
         self.record_path = record_path
