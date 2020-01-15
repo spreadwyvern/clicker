@@ -7,20 +7,22 @@ Python 3 and Windows OS
 pip install -r requirements.txt
 ```
 ## Usage
-Execute the python script
+Execute the python script,
 ```
 python clicker.py
 ```
-or run the compiled executable clicker.exe file in 'dist' folder
+or run the compiled executable clicker.exe file in 'dist' folder.
+
 ## Description
-The main UI is in clicker.py while the layout of the UI is in clicker_ui.py.
+The main app is the clicker.py which calls clicker_ui.py for the layout of UI.
 Core functions are in utils.py which consists of the AutoSignal and Recorder classes.
-- AutoSignal
+### AutoSignal
 Automatically send signal to the patient event receptor on EEG.
 There are two types of signals:
 1. automatic signal to check the conscioussness of the patient
 2. synchronizing beeps to help synchronize time of EEG and the recording laptop
-- Recorder
+
+### Recorder
 Monitors the below keyboard inputs and record the corresponding event
 F15 as technician signal
 F16 as patient response
