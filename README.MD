@@ -11,7 +11,7 @@ Execute the python script,
 ```
 python clicker.py
 ```
-or run the compiled executable clicker.exe file in 'dist' folder.
+or run the compiled executable **clicker.exe** file in **dist** folder.
 
 ## Description
 The main app is the *clicker.py* which calls *clicker_ui.py* for the layout of UI.
