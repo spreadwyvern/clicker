@@ -24,11 +24,10 @@ There are two types of signals:
 
 ### Recorder
 Monitors the below keyboard inputs and record the corresponding event
-F15 as technician signal
-F16 as patient response
-F17, num_lock as automatic signal
-Scroll lock as syncing signal
-in the recording csv file, 'event' column records each event with label 'tech', 'patient', 'auto', 'sync'
+- F16 as patient response
+- F17, num_lock as automatic signal
+- Scroll lock as syncing signal
+- in the recording csv file, 'event' column records each event with label 'tech', 'patient', 'auto', 'sync'  
 *note: the control box can receive caps_lock, num_lock and scoll_lock inputs from the PC, so I use it as a way to let PC to send signal from the PC to control the relay. However, it takes two press-release event of num_lock to turn on and off the relay. Thus to avoid recorder recording a duplicate event I use F17 as the key for recorder to monitor*
 
 
