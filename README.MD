@@ -3,14 +3,14 @@
 A recording application for clicker system
 ## Requirements
 Python 3 and Windows OS
-'''
+```
 pip install -r requirements.txt
-'''
+```
 ## Usage
 Execute the python script
-'''
+```
 python clicker.py
-'''
+```
 or run the compiled executable clicker.exe file in 'dist' folder
 ## Description
 The main UI is in clicker.py while the layout of the UI is in clicker_ui.py.
