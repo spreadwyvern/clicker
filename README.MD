@@ -1,6 +1,9 @@
 # Clicker Recorder
 ## Introduction
 A recording application for clicker system
+
+[ui](data/ui_demo.png)
+
 ## Requirements
 Python 3 and Windows OS
 ```
