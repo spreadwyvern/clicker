@@ -33,6 +33,6 @@ Monitors the below keyboard inputs and record the corresponding event
 
 
 ## Default input and output files
-The default ouput file is *clicker_record.csv*, this can be modified in line 27 of *clicker.py*
+The default ouput file is *click_record.csv*, this can be modified in line 27 of *clicker.py*
 Default alarm tone is *200.wav*, this can be changed in line 160 of *utils.py*
 
