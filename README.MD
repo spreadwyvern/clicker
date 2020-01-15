@@ -1,7 +1,7 @@
 # Clicker Recorder
 ## Introduction
 A recording application for clicker system
-
+!
 [ui](data/ui_demo.png)
 
 ## Requirements
